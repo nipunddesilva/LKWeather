@@ -81,9 +81,9 @@ public class WeatherHttpDataProcessor implements HttpDataProcessor {
 
     @Override
     public boolean processReceivedData(InputStream is) {
-        boolean isProcessed = false;
+        boolean isProcessed;
         String weatherDataStr;
-        //Processing Current Weather
+
         weatherDataStr = currentWeatherDataString(is);
         if (weatherDataStr != null) {
             isProcessed = passCurrentWeatherJson(weatherDataStr);
@@ -120,25 +120,7 @@ public class WeatherHttpDataProcessor implements HttpDataProcessor {
         try {
             if (mDidRequestCurrentWeather) {
                 jsonObject = new JSONObject(jsonString);
-
-                /*
-                    JSONArray array = jsonObject.getJSONArray("weather");
-                    JSONObject mainWeathArrayFirstObject = array.getJSONObject(0);
-                    JSONObject mainObject = jsonObject.getJSONObject("main");
-                    JSONObject windObject = jsonObject.getJSONObject("wind");
-                 */
-
                 Weather weather = jsonToWeatherObject(jsonObject);
-
-                /*
-                      mCurrentWeatherInfoMap.put(MainActivity.KEY_DESC, mainWeathArrayFirstObject.getString("description"));
-                      mCurrentWeatherInfoMap.put(MainActivity.KEY_TEMP, mainObject.getString("temp"));
-                      mCurrentWeatherInfoMap.put(MainActivity.KEY_PRES, mainObject.getString("pressure"));
-                      mCurrentWeatherInfoMap.put(MainActivity.KEY_HUMI, mainObject.getString("humidity"));
-
-                      mCurrentWeatherInfoMap.put(MainActivity.KEY_WIND_SPEED, windObject.getString("speed"));
-                      mCurrentWeatherInfoMap.put(MainActivity.KEY_WIND_DEG, windObject.getString("deg"));
-                 */
 
                 if (weather != null) {
                     mCurrentWeatherInfoMap.put(MainActivity.KEY_DESC, weather.getDescription());

@@ -11,7 +11,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 import com.blogspot.nipunswritings.lkweather.adapter.WeatherPagerAdapter;
 import com.blogspot.nipunswritings.lkweather.database.WeatherForcastDataManager;
 import com.blogspot.nipunswritings.lkweather.fragment.CurrentWeatherFragment;
+import com.blogspot.nipunswritings.lkweather.network.NetUtils;
 import com.blogspot.nipunswritings.lkweather.weather.Weather;
 import com.blogspot.nipunswritings.lkweather.weather.WeatherHttpDataProcessor;
 import com.blogspot.nipunswritings.lkweather.weather.WeatherUtil;
@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
-    private String TAG = "MainActivity";
 
     public static final String KEY_TEMP = "temp";
     public static final String KEY_DESC = "desc";
@@ -52,13 +50,11 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
 
             if (msg.what == 0){
-                Log.d(TAG, "Weather Forcast available");
                 WeatherForcastDataManager manager = new WeatherForcastDataManager(MainActivity.this);
                 manager.createWritableDb();
                 List<Weather> list = manager.getAllForcastData();
                 if (list != null) {
                     mWeaPageadapter.getmWeatherForecastFragment().updateWeatherForcast(list);
-                    Log.d(TAG, "List Updating available");
                 }
                 manager.closeDb();
 
@@ -80,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 CurrentWeatherFragment fragment = mWeaPageadapter.getmCurrentWeatherFragment();
-                fragment.updateWeatherInfoUis(temp, desc, humid+"%", pressure+" hPa", windSpeed+" km/h, from "+windDirection);
+                fragment.updateWeatherInfoUis(temp, desc, humid+" %", pressure+" hPa", windSpeed+" km/h, from "+windDirection);
 
 
             }
@@ -160,23 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
         mWeaPageadapter = new WeatherPagerAdapter(getSupportFragmentManager());
         mWeatherFragmentVp.setAdapter(mWeaPageadapter);
-        mWeatherFragmentVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-               //WeatherPagerAdapter weatherPagerAdapter = (WeatherPagerAdapter) mWeatherFragmentVp.getAdapter();
-                // weatherPagerAdapter.getItem()
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
     }
 
@@ -184,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        if (sharedPreferences.getBoolean("pref_auto_download", false)){
+        if (sharedPreferences.getBoolean("pref_auto_download", true)){
             getNewWeatherData();
         }
     }
@@ -207,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.activity_main_menu_setting:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                Log.d(TAG, "Where is preferences");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -216,6 +194,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getNewWeatherData () {
+        if(!NetUtils.isConnectedToNetwork(MainActivity.this)){
+            Toast.makeText(MainActivity.this, "No Network Connection", Toast.LENGTH_LONG).show();
+            return;
+        }
         setTitle(LKWeatherApp.getSingleton().getCurrentLocationName());
         gotWeatherForcastData = false;
         gotCurrentWeatherData = false;

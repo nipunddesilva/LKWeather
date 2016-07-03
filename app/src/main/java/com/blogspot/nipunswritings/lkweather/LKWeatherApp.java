@@ -27,6 +27,14 @@ public class LKWeatherApp extends Application {
         cityNameIdMap.put("Ampara", 1251459L);
         cityNameIdMap.put("Colombo", 1248991L);
         cityNameIdMap.put("Gampaha", 1246007L);
+        cityNameIdMap.put("Anuradhapura", 1251081L);
+        cityNameIdMap.put("Galle", 1246294L);
+        cityNameIdMap.put("Hambantota", 1244926L);
+        cityNameIdMap.put("Jaffna", 1242833L);
+        cityNameIdMap.put("Kalutara", 1241964L);
+        cityNameIdMap.put("Kandy", 1241622L);
+        cityNameIdMap.put("Kurunegala", 1237980L);
+        cityNameIdMap.put("Matara", 1235846L);
 
         singleton = this;
     }

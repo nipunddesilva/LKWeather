@@ -19,12 +19,11 @@ import java.util.List;
  */
 public class WeatherDataAdapter extends BaseAdapter {
 
-    private Context mContext;
     private LayoutInflater mLayoutInflater;
     private List<Weather> mDataList;
 
     public WeatherDataAdapter(Context context, List<Weather> dataList) {
-        mContext = context;
+
         mDataList = dataList;
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -72,7 +71,7 @@ public class WeatherDataAdapter extends BaseAdapter {
         viewHolder.tempTv.setText(String.valueOf(Math
                 .round(WeatherUtil.kelvinToCelsiusTemp(weather.getTemp()))));
         viewHolder.descTv.setText(weather.getDescription());
-        viewHolder.huimidTv.setText(": "+format.format(weather.getHumidity()));
+        viewHolder.huimidTv.setText(": "+format.format(weather.getHumidity())+" %");
         viewHolder.pressTv.setText(": "+format.format(weather.getPressure())+" hPa");
 
 

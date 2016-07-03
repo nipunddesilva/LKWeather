@@ -3,8 +3,6 @@ package com.blogspot.nipunswritings.lkweather.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.blogspot.nipunswritings.lkweather.weather.Weather;
 
@@ -84,7 +82,7 @@ public class WeatherForcastDataManager extends WeatherDataManager
                         ));
             } while (cursor.moveToNext());
         }
-        Log.d("WeatherForcastManager", "Forecast List Size : "+forcastsList.size());
+
         return forcastsList;
     }
 

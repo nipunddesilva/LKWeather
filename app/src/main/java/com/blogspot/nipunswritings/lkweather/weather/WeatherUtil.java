@@ -1,9 +1,5 @@
 package com.blogspot.nipunswritings.lkweather.weather;
 
-import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,7 +35,7 @@ public class WeatherUtil {
     }
 
     public static String getTimeFromLong (long time) {
-        Log.d("getTimeFromLong", "getTimeFromLong (long time) = "+time);
+
         String timeText = "";
 
         Calendar calendar = Calendar.getInstance();
@@ -51,15 +47,8 @@ public class WeatherUtil {
                 +" "+String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY))
                 +" : "+String.format("%02d", calendar.get(Calendar.MINUTE));
 
-        Log.d("getTimeFromLong", "timeText = "+timeText);
 
         return timeText;
-    }
-
-    public static Spanned tempWithCelciusDegree (int celciusVal) {
-        String tempText = ""+celciusVal+" <sup style=\"font-size: small\">&#x2103;</sup>";
-        return Html.fromHtml(tempText);
-
     }
 
 }
